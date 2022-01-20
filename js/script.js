@@ -1,9 +1,44 @@
-import changeTheme from "./changeTheme.js";
-import popupButtonScroll from "./popupButtonScroll.js";
-import fixMenu from "./fixMenu.js";
-
 $(document).ready(function () {
-  $(".owl-carousel").owlCarousel({
+  const changeTheme = () => {
+    let showOrHide = true;
+    const sun = $('.gg-sun');
+    const moon = $('.gg-moon');
+    $('.mode-container').click(function () {
+      if (showOrHide) {
+        sun.removeClass('d-none');
+        sun.addClass('d-block');
+        moon.removeClass('d-block');
+        moon.addClass('d-none');
+        $('html').attr('data-theme', 'dark');
+      } else {
+        sun.addClass('d-none');
+        sun.removeClass('d-block');
+        moon.removeClass('d-none');
+        moon.addClass('d-block');
+        $('html').attr('data-theme', 'light');
+      }
+      showOrHide = !showOrHide;
+    });
+  };
+
+  const fixMenuHeader = () => {
+    $(window).on('scroll', function () {
+      const scroll = $(window).scrollTop();
+      if (scroll >= 80) {
+        $('#header__menu').addClass('header__menu__fixed--top ');
+      } else {
+        $('#header__menu').removeClass('header__menu__fixed--top ');
+      }
+    });
+  };
+
+  const toggleButtonScroll = function () {
+    $(window).scroll(function () {
+      $('.movetop').toggleClass('active ', this.scrollY > 0);
+    });
+  };
+
+  $('.owl-carousel').owlCarousel({
     loop: true,
     margin: 0,
     nav: false,
@@ -31,8 +66,22 @@ $(document).ready(function () {
       },
     },
   });
-  $(".count-number").countUp();
+  $('.count-number').countUp();
   changeTheme();
-  popupButtonScroll();
-  fixMenu();
+  toggleButtonScroll();
+  fixMenuHeader();
+
+  const iconClose = $('.services__feature__icon-close');
+  const iconBurrger = $('.services__feature__icon-expand');
+  const buttonToggle = $('.navbar-toggler-services__feature__icon');
+  buttonToggle.click(function () {
+    const getAttributeExpanded = $('.navbar-toggler').attr('aria-expanded');
+    if (getAttributeExpanded === 'true') {
+      iconClose.css('display', 'none');
+      iconBurrger.css('display', 'inline-block');
+    } else {
+      iconBurrger.css('display', 'none');
+      iconClose.css('display', 'inline-block');
+    }
+  });
 });
